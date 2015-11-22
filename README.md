@@ -8,6 +8,7 @@ Clojure uses [Ring](https://github.com/ring-clojure/ring) for routing. For more 
 
 ## Templates
 The project is using [Selmer](https://github.com/yogthos/Selmer#usage). A fast, Django inspired template system in Clojure.
+For Markdown, it is using this [parser](https://github.com/yogthos/markdown-clj).
 
 ## Usage
 ```
