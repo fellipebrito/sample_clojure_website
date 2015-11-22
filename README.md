@@ -6,6 +6,9 @@ Compojure apps will run on any ring-compatible server, but we recommend [http-ki
 ## Middleware
 Clojure uses [Ring](https://github.com/ring-clojure/ring) for routing. For more information read [Ring Spec](https://github.com/mmcgrana/ring/blob/master/SPEC)
 
+## Templates
+The project is using [Selmer](https://github.com/yogthos/Selmer#usage). A fast, Django inspired template system in Clojure.
+
 ## Usage
 ```
 lein run -m site.core
