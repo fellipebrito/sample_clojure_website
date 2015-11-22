@@ -4,25 +4,32 @@
             [org.httpkit.server :refer [run-server]] ; httpkit is a server
             [selmer.parser :refer [render-file]] ;; templates
             [markdown.core :as md];; markdown
-            [clojure.java.io :as io]))
+            [clojure.java.io :as io]
+            [clojure.string :as str]))
 
-(defn parse-metadata [file]
-  (md/md-to-html-string-with-meta (-> file io/resource slurp)))
+(defn parse-post-metadata [file]
+  (md/md-to-html-string-with-meta (-> (str "posts/" file ".md") io/resource slurp)))
 
-(defn markdown [req]
-  {:status 200 
+
+;; take all but the first one (the directory)
+(def all-posts
+  (let [directory (clojure.java.io/file "resources/posts/")
+        files (for [file (file-seq directory)] (first (str/split (.getName file) #".md")))]
+    (take 10 (drop 1 files))))
+
+;; ROUTES
+(defn home [req]
+  {:status 200
    :headers {"Content-Type" "text/html"}
-   :body    (render-file "templates/markdown.html"
-                         (parse-metadata "templates/markdown.md"))})
+   :body    (render-file "templates/home.html" {:posts all-posts})})
+
+
+(defn post [req]
+  {:status 200
+   :headers {"Content-Type" "text/html"}
+   :body    (render-file "templates/post.html"
+                         (parse-post-metadata (get (:params req) :slug)))})
 
 (defroutes app
-  (GET "/" [] "Hello World")
-  (GET "/hello/:name" [name]
-           (render-file "templates/hello.html" {:name name}))
-
-  (GET "/markdown" [] markdown)
-
-  (GET "/posts" req
-    (let [title (get (:params req) :title)
-          author (get (:params req) :author)]
-      (str "Title: " title ", Author: " author))))
+  (GET "/" [] home)
+  (GET "/post/:slug" [slug] post))
