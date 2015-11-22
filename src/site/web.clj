@@ -1,4 +1,4 @@
-(ns site.core
+(ns site.web
   (:require [compojure.core :refer :all];; routing library
             [ring.middleware.defaults :refer :all];; HTTP server abstraction
             [org.httpkit.server :refer [run-server]] ; httpkit is a server
@@ -15,7 +15,7 @@
    :body    (render-file "templates/markdown.html"
                          (parse-metadata "templates/markdown.md"))})
 
-(defroutes myapp
+(defroutes app
   (GET "/" [] "Hello World")
   (GET "/hello/:name" [name]
            (render-file "templates/hello.html" {:name name}))
@@ -26,6 +26,3 @@
     (let [title (get (:params req) :title)
           author (get (:params req) :author)]
       (str "Title: " title ", Author: " author))))
-
-(defn -main []
-  (run-server (wrap-defaults myapp site-defaults) {:port 5000}))
