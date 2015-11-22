@@ -1,6 +1,10 @@
-(ns site.core)
+(ns site.core
+  (:require [compojure.core :refer :all]
+            [org.httpkit.server :refer [run-server]])) ; httpkit is a server
 
-(defn foo
-  "I don't do a whole lot."
-  [x]
-  (println x "Hello, World!"))
+(defroutes myapp
+  (GET "/" [] "Hello World")
+  (GET "/hello/:name" [name] (str "Hello " name)))
+
+(defn -main []
+  (run-server myapp {:port 5000}))
