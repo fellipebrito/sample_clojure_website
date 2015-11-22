@@ -1,5 +1,6 @@
 (ns site.web
   (:require [compojure.core :refer :all];; routing library
+            [compojure.route :refer [resources]]
             [ring.middleware.defaults :refer :all];; HTTP server abstraction
             [org.httpkit.server :refer [run-server]] ; httpkit is a server
             [selmer.parser :refer [render-file]] ;; templates
@@ -21,7 +22,7 @@
 (defn home [req]
   {:status 200
    :headers {"Content-Type" "text/html"}
-   :body    (render-file "templates/home.html" {:posts all-posts})})
+   :body    (render-file "templates/index.html" {:posts all-posts})})
 
 
 (defn post [req]
@@ -32,4 +33,5 @@
 
 (defroutes app
   (GET "/" [] home)
-  (GET "/post/:slug" [slug] post))
+  (GET "/post/:slug" [slug] post)
+  (resources "/"))
